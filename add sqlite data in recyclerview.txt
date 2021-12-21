@@ -1,0 +1,286 @@
+mport android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class dbmanager extends SQLiteOpenHelper
+{
+    private static final String dbname="dbcontact";
+
+    public dbmanager(@Nullable Context context)
+    {
+        super(context, dbname, null, 1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase)
+    {
+        String qry="create table tbl_contact ( id integer primary key autoincrement, name text, contact text, email text)";
+        sqLiteDatabase.execSQL(qry);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1)
+    {
+        String qry="DROP TABLE IF EXISTS tbl_contact";
+        sqLiteDatabase.execSQL(qry);
+        onCreate(sqLiteDatabase);
+    }
+
+    public  String addrecord(String name, String contact, String email)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        ContentValues cv=new ContentValues();
+        cv.put("name",name);
+        cv.put("contact",contact);
+        cv.put("email",email);
+        float res=db.insert("tbl_contact",null,cv);
+
+        if(res==-1)
+            return "Failed";
+        else
+            return  "Successfully inserted";
+
+    }
+
+    public Cursor readalldata()
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        String qry="select * from tbl_contact order by id desc";
+        Cursor cursor=db.rawQuery(qry,null);
+        return  cursor;
+    }
+}
+
+
+
+
+
+
+************************************************************************
+
+
+package com.example.notepad;
+
+import android.database.Cursor;
+import android.os.Bundle;
+
+import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class fetchdata extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    ArrayList<model> dataholder;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fatch);
+
+        recyclerView=(RecyclerView)findViewById(R.id.recview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        Cursor cursor=new dbmanager(this).readalldata();
+        dataholder=new ArrayList<>();
+
+        while(cursor.moveToNext())
+        {
+            model obj=new model(cursor.getString(1),cursor.getString(2),cursor.getString(3));
+            dataholder.add(obj);
+        }
+
+        myadapter adapter=new myadapter(dataholder);
+        recyclerView.setAdapter(adapter);
+
+    }
+}
+
+
+*************************************************************************
+
+
+package com.example.notepad;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextInputLayout name, contact, email;
+
+    FloatingActionButton fb;
+
+    Button sbmt;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        name = (TextInputLayout) findViewById(R.id.nametext);
+        contact = (TextInputLayout) findViewById(R.id.contacttext);
+        email = (TextInputLayout) findViewById(R.id.emailtext);
+        fb = (FloatingActionButton) findViewById(R.id.fbtn);
+        sbmt = (Button) findViewById(R.id.sbmt_add);
+
+
+        sbmt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                processinsert(name.getEditText().getText().toString(),contact.getEditText().getText().toString(),email.getEditText().getText().toString());
+            }
+        });
+
+
+        fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),fetchdata.class));
+            }
+        });
+
+
+    }
+
+    private void processinsert(String n, String c, String e)
+    {
+        String res=new dbmanager(this).addrecord(n,c,e);
+        name.getEditText().setText("");
+        contact.getEditText().setText("");
+        email.getEditText().setText("");
+        Toast.makeText(getApplicationContext(),res,Toast.LENGTH_SHORT).show();
+    }
+
+}
+
+************************************************************************
+
+
+package com.example.notepad;
+
+public class model {
+
+
+        String name,contact,email;
+
+        public model(String name, String contact, String email) {
+            this.name = name;
+            this.contact = contact;
+            this.email = email;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getContact() {
+            return contact;
+        }
+
+        public void setContact(String contact) {
+            this.contact = contact;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+************************************************************************
+
+package com.example.notepad;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+ public class myadapter extends RecyclerView.Adapter<myadapter.myviewholder>
+{
+    ArrayList<model> dataholder;
+
+    public myadapter(ArrayList<model> dataholder) {
+        this.dataholder = dataholder;
+    }
+
+    @NonNull
+    @Override
+    public myviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.singalrow,parent,false);
+        return new myviewholder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull myviewholder holder, int position)
+    {
+        holder.dname.setText(dataholder.get(position).getName());
+        holder.dcontact.setText(dataholder.get(position).getContact());
+        holder.demail.setText(dataholder.get(position).getEmail());
+    }
+
+    @Override
+    public int getItemCount() {
+        return dataholder.size();
+    }
+
+    class myviewholder extends RecyclerView.ViewHolder
+    {
+        TextView dname,dcontact,demail;
+        public myviewholder(@NonNull View itemView)
+        {
+            super(itemView);
+            dname=(TextView)itemView.findViewById(R.id.displayname);
+            dcontact=(TextView)itemView.findViewById(R.id.displaycontact);
+            demail=(TextView)itemView.findViewById(R.id.displayemail);
+        }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,106 @@
+
+
+
+
+static fragments...........used
+
+***********************************************************************
+
+
+package com.example.webviewmulti;
+
+
+
+
+public class BlankFragment3 extends Fragment {
+
+    EditText editText;
+    Button button;
+    Datasender datasender;
+
+
+
+    public BlankFragment3() {
+        // Required empty public constructor
+    }
+
+
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_blank3, container, false);
+     editText = (EditText)v.findViewById(R.id.edt_password_log);
+     button =(Button)v.findViewById(R.id.button_1);
+
+
+  button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+          String ed1 =editText.getText().toString();
+
+               datasender.sendData(ed1);
+
+      }
+  });
+
+  return v;
+    }
+
+
+    @Override///////// it is imp method of lifecycle to check data atteched with method or not
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+           datasender = (Datasender)context;
+
+    }
+}
+
+
+
+***********************************************************************************
+
+public class MainActivity3 extends AppCompatActivity implements Datasender {
+
+
+    EditText name, password;
+    Button login;
+    TextView registor;
+    String namelog;
+    String passwordlog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main3);
+
+        name = (EditText) findViewById(R.id.edt_name_LOg);
+        password = (EditText) findViewById(R.id.edt_password_log);
+        login = (Button) findViewById(R.id.button_1);
+
+
+
+
+
+
+
+
+    }
+
+    @Override
+    public void sendData(String Data) {
+
+        registor =(TextView)findViewById(R.id.text_view_21);
+        registor.setText(Data);
+
+
+    }
+
+
+
+
+
