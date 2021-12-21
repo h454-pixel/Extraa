@@ -1,0 +1,168 @@
+package com.example.theread;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toolbar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main3 extends AppCompatActivity {
+    Button button;
+    Spinner spinner ;
+    String spinnerstring;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+     button =(Button)findViewById(R.id.button);
+       spinner =(Spinner)findViewById(R.id.spinner_1);
+
+        List<String>list =new ArrayList<String>();
+         list.add("android1");
+         list.add("java1");
+         list.add("million1");
+         list.add("billion1");
+          list.add("android1");
+          list.add("java1");
+        list.add("million1");
+        list.add("billion1");
+        list.add("android1");
+        list.add("java1");
+        list.add("million1");
+        list.add("billion1");
+
+
+        ArrayAdapter<String>arrayAdapter =new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,list);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+                spinnerstring = (String)spinner.getSelectedItem();
+
+
+
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                switch(spinnerstring){
+
+                    case "million1":
+                        Intent intent = new Intent(Main3.this, MainActivity2.class);
+                        startActivity(intent);
+                        break;
+
+                    case "java1":
+                        intent = new Intent(Main3.this, MainActivity2.class);
+                        startActivity(intent);
+                        break;
+
+                    case "billion1":
+                        intent = new Intent(Main3.this, MainActivity2.class);
+                        startActivity(intent);
+                        break;
+
+
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+    }
+
+
+
+*********************************************************************
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2"
+    android:orientation="vertical">
+
+
+   <Toolbar
+       android:id="@+id/tooooll_bar"
+       android:layout_width="match_parent"
+       android:layout_height="68dp"
+       android:background="@color/design_default_color_primary"></Toolbar>
+
+
+ <Spinner
+     android:background="@drawable/back"
+     android:spinnerMode="dialog"
+     android:id="@+id/spinner_1"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_gravity="center"
+     android:layout_marginTop="300dp"></Spinner>
+
+
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="button"></Button>
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+

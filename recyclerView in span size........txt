@@ -1,0 +1,20 @@
+
+
+
+ *****not more than (2 getspansize method )in because gridlayoutmanger consists 2
+
+       GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+      
+      gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+          @Override
+          public int getSpanSize(int position) {
+              return (position%3==0?2:1);
+          }
+      });
+
+        recyclerView.setLayoutManager(gridLayoutManager);
+        RecyclerAdapter customAdapter = new RecyclerAdapter(MainActivity.this, personNames,personimagess);
+        recyclerView.setAdapter(customAdapter);
+
+
+    }

@@ -1,0 +1,207 @@
+
+
+ 1 xmal 1 java 1 menu 
+
+******************************************************************************
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toooooool"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorAccent"
+
+        > </androidx.appcompat.widget.Toolbar>
+
+
+
+
+
+
+</LinearLayout>
+
+***********************************************************************************
+
+
+ijava
+
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    Toolbar  toolbar ;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+toolbar = (Toolbar)findViewById(R.id.toooooool);
+setSupportActionBar(toolbar); //////////////////////////no need///////////// don't write this language........
+
+
+ ///////////////////// back button on ttoooll barr/////////////////////////////////////////
+
+getSupportActionBar.setDisplayhomeenbled(true);
+
+
+
+
+    }
+
+
+    @Override
+    public  boolean onCreateOptionsMenu(Menu menu) {
+      getMenuInflater() .inflate(R.menu.bottom_nav_menu,menu);
+      return true;
+
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+          int id =  item.getItemId();
+
+         if(id==R.id.navigation_home){
+
+             Toast.makeText(this, "toolbar first working", Toast.LENGTH_SHORT).show();
+
+         }else if (id== R.id.navigation_dashboard){
+
+             Toast.makeText(this, "toolbar second working", Toast.LENGTH_SHORT).show();
+
+
+         }else if (id==R.id.navigation_notifications){
+
+
+             Toast.makeText(this, "toolbar third working", Toast.LENGTH_SHORT).show();
+
+
+         }
+
+
+         return super.onOptionsItemSelected(item);
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+**************************************************************************
+
+
+ 1 menu 
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/navigation_homeee"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home"
+      />
+
+
+
+
+
+
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_dashboard"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_notifications"
+        app:showAsAction="always"/>
+
+</menu>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
