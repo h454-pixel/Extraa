@@ -1,0 +1,96 @@
+
+    private Uri  urimage;
+    Button button,button2;
+    ImageView imageView ;
+    private static final int PICK_IMAGE_REQUEST =1;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        imageView =(ImageView)findViewById(R.id.image_view_view);
+        button =(Button)findViewById(R.id.button);
+button2 =(Button)findViewById(R.id.button2);
+
+
+
+
+   button2.setOnClickListener(new View.OnClickListener() {
+       @Override
+       public void onClick(View v) {
+           Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+           startActivity(intent);
+       }
+   });
+
+
+
+
+
+
+
+
+
+
+
+    button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent,PICK_IMAGE_REQUEST);
+
+
+        }
+    });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+         if (requestCode==PICK_IMAGE_REQUEST && requestCode== RESULT_OK &&data!=null&&
+         data.getData()!=null) {
+
+             urimage = data.getData();
+            //  imageView.setImageURI(urimage);
+
+             Glide.with(this).load(urimage).into(imageView);
+         }
+        // imageView.setImageURI(urimage);
+    }
+
+
+
+
+
+}
+
+
+
+
+
+***********************************************************
+ menifest       <activity android:name=".MainActivity2"
+            android:parentActivityName=".MainActivity"></activity>
+        <
+
+***********************************************************
+
+
+public class MainActivity2 extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+
+
