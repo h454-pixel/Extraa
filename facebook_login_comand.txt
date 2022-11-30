@@ -1,0 +1,35 @@
+
+      
+keytool -exportcert -alias androiddebugkey -keystore "C:\Users\HP\.android\debug.keystore" | "C:\openssl\bin\openssl" sha1 -binary | "C:\openssl\bin\openssl" base64
+ 
+
+
+
+***************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+C:\Users\HP>cd..
+
+C:\Users>cd..
+
+C:\>cd Program Files\Java\jdk-13.0.1\bin
+
+C:\Program Files\Java\jdk-13.0.1\bin>
+C:\Program Files\Java\jdk-13.0.1\bin>
+C:\Program Files\Java\jdk-13.0.1\bin>keytool -exportcert -alias androiddebugkey -keystore "C:\Users\HP\.android\debug.keystore" | "C:\openssl\bin\openssl" sha1 -binary | "C:\openssl\bin\openssl" base64
+Enter keystore password:
+Bmce+9aHdOoVtE7fS3B07tfj7Bc=
+
+C:\Program Files\Java\jdk-13.0.1\bin>
