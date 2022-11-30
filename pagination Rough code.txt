@@ -1,0 +1,301 @@
+
+
+interface RetrofitEndpoint {
+
+    @GET("paged/list/endpoint")
+    Call<PagedList<Object>> getPagedList(@Query("page") int page);
+}
+
+
+
+***********************************************
+public class DemoActivity extends BaseActivity{
+
+List<BaseModel> orderList = new ArrayList<>();
+
+    ListAdapter listAdapter;
+    LinearLayoutManager layoutManager;
+OrderListAdapter orderListAdapter;
+
+    int pageIndex = 1; // you can pass 1,2,3...
+    int pageCount = 10; //you can pass 10,20...
+
+
+    boolean isApiSuccess = false;
+    //if api get success == true then you need to work with load more sp we take one boolean variable
+
+@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_demo);
+
+        findView();
+        setRecyclerViewPagination();
+
+    }
+
+    private void findView() {
+         //recyclerview
+        rv_po_order_number = findViewById(R.id.rv_po_order_number);
+
+    }
+
+
+    //custom OnScrollListener
+private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            if (isApiSuccess) {
+                pageIndex++;
+                listTestApiCall(pageIndex, searchQuery);
+                Log.e(TAG, pageIndex + " page count ");
+
+                orderListAdapter.showLoading(true);
+
+                rv_po_order_number.post(new Runnable() {
+                    public void run() {
+                        // There is no need to use notifyDataSetChanged()
+                        orderListAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }
+    };
+private void setRecyclerViewPagination() {
+        orderList = new ArrayList<>();
+        orderListAdapter = new OrderListAdapter(mActivity, orderList);
+
+        layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        rv_po_order_number.setLayoutManager(layoutManager);
+        rv_po_order_number.setHasFixedSize(true);
+
+        rv_po_order_number.setAdapter(orderListAdapter);
+        rv_po_order_number.addOnScrollListener(recyclerViewOnScrollListener);
+
+        listTestApiCall(pageCount,pageIndex);
+
+    }
+
+private void listTestApiCall(final int pageCount,final int pageIndex) {
+
+        //  if (CommonUtils.isConnectingToInternet(mActivity)) {
+        if (validateInternetConn(mActivity)) {//check internet
+
+            final boolean isFirstPage = pageIndex == 1 ? true : false;
+
+            if (isFirstPage)
+                //do your stuff - if you want to show loader
+
+            Call<BaseModel> call = ApiClient.getClient().listApiCall(pageCount, pageIndex);
+
+            call.enqueue(new Callback<BaseModel>() {
+                @Override
+                public void onResponse(Call<BaseModel> call, Response<BaseModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+
+                            boolean success = response.body().getStatus();
+                            isApiSuccess = response.body().getStatus();
+
+                            if (success) {
+
+                                List<BaseModel> list = new ArrayList<>();
+
+                                if (response.body().getData() != null) {
+                                    list = response.body().getData();
+
+                                    if (isFirstPage)
+                                        orderList.clear();
+
+                                    orderList.addAll(response.body().getData());
+
+                                }
+
+                                if (list != null && list.size() > 0) {
+                                    isApiSuccess = true;
+                                } else {
+                                    isApiSuccess = false;
+                                }
+
+                            } else if (!success) {
+                                isApiSuccess = false;
+                                String message = response.body().getMessage();
+
+                            }
+
+
+                            listAdapter.showLoading(false);
+                            listAdapter.notifyDataSetChanged();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("Tag", "error=" + e.toString());
+                        isApiSuccess = false;
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<BaseModel> call, Throwable t) {
+                    Log.e("Tag", "error" + t.toString());
+
+                    isApiSuccess = false;
+                                    }
+            });
+        }
+  }
+   }
+
+
+
+
+
+
+
+******************************************************************************
+public class OrderListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+
+   Activity mActivity;
+
+   List<OrderListBaseModel.DataBean> mList;
+
+
+   PurchaseOrderReceiveOnClick purchaseOrderReceiveOnClick;
+   DeleteUpdatePOOnClick deleteUpdatePOOnClick;
+
+   public static final int TYPE_FOOTER = 1;
+   public static final int TYPE_ITEM = 2;
+
+   protected boolean showLoader = true;
+
+   public OrderListAdapter(Activity mActivity, List<OrderListBaseModel.DataBean> mList, PurchaseOrderReceiveOnClick purchaseOrderReceiveOnClick,DeleteUpdatePOOnClick deleteUpdatePOOnClick) {
+       this.mActivity = mActivity;
+       this.purchaseOrderReceiveOnClick = purchaseOrderReceiveOnClick;
+       this.deleteUpdatePOOnClick = deleteUpdatePOOnClick;
+       this.mList = mList;
+
+
+   }
+
+   public OrderListAdapter(Activity mActivity, List<OrderListBaseModel.DataBean> mList) {
+       this.mActivity = mActivity;
+
+       this.mList = mList;
+
+
+
+   }
+
+
+   @Override
+   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+       if (viewType == TYPE_ITEM) {
+           View v = LayoutInflater.from(parent.getContext())
+                   .inflate(R.layout.row_purchase_order_receive, parent, false);
+           return new DataViewHolder(v, purchaseOrderReceiveOnClick);
+       } else if (viewType == TYPE_FOOTER) {
+           View v = LayoutInflater.from(parent.getContext())
+                   .inflate(R.layout.loading_layout, parent, false);
+           return new FooterViewHolder(v);
+       } else
+           return null;
+   }
+
+   @Override
+   public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
+
+       if (holder instanceof DataViewHolder) {
+
+           final DataViewHolder dataViewHolder = (DataViewHolder) holder;
+
+
+           final OrderListBaseModel.DataBean dataBean = getItem(position);
+           if (dataBean != null) {
+               dataViewHolder.setPosition(position);
+                dataViewHolder.setSingleBean(dataBean);
+
+
+           }
+
+
+       }
+   }
+
+   private OrderListBaseModel.DataBean getItem(int position) {
+       if (mList.size() > 0)
+           return mList.get(position);
+
+       else
+           return null;
+   }
+
+   public void showLoading(boolean status) {
+       showLoader = status;
+   }
+
+
+   @Override
+   public int getItemViewType(int position) {
+       if ((position == mList.size() - 1) && showLoader) {
+           return TYPE_FOOTER;
+       }
+       return TYPE_ITEM;
+   }
+   public void removeItem(int position) {
+       mList.remove(position);
+       notifyItemRemoved(position);
+   }
+   @Override
+   public int getItemCount() {
+       return mList.size();
+   }
+
+
+   public static class DataViewHolder extends RecyclerView.ViewHolder {
+       int position;
+       OrderListBaseModel.DataBean dataBean;
+       private TextView tv_row_po_no,textViewOptions;
+
+       public DataViewHolder(View v, final PurchaseOrderReceiveOnClick purchaseOrderReceiveOnClick) {
+           super(v);
+           tv_row_po_no = v.findViewById(R.id.tv_row_po_no);
+           textViewOptions = v.findViewById(R.id.textViewOptions);
+
+
+
+       }
+
+       public void setPosition(int position) {
+           this.position = position;
+       }
+
+       public void setSingleBean(OrderListBaseModel.DataBean dataBean) {
+           this.dataBean = dataBean;
+       }
+   }
+
+   private class FooterViewHolder extends RecyclerView.ViewHolder {
+
+       public FooterViewHolder(View view) {
+           super(view);
+
+       }
+   }
+
+
+   }
+
+
+*****************************************************************************
+

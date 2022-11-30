@@ -1,0 +1,83 @@
+package com.example.navigation_custom;
+
+
+
+
+
+
+
+***********************click on button get popup menu......*************
+
+
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+
+
+public class MainActivity3 extends AppCompatActivity {
+
+ //   String name;
+   //TextView textView;
+
+ Button button;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main3);
+button =(Button)findViewById(R.id.sign_up_POpup);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(MainActivity3.this, button);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(MainActivity3.this,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+            }
+        });//closing the setOnClickListener method
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//textView =(TextView)findViewById(R.id.txt_name);
+//name = getIntent().getStringExtra("first");
+//textView.setText(name);
+
+
+
+
+
+
+
