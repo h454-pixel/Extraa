@@ -1,0 +1,37 @@
+*******
+*
+   File
+      An "abstract" representation of a file system entity identified by a
+      pathname. The pathname may be absolute (relative to the root directory
+     of the file system) or relative to the current directory in which
+      the program is running.
+
+    The actual file referenced by a File may or may not exist. It may also,
+   despite the name File, be a directory or other non-regular file.
+                */
+
+
+**********A directory is a File which can contain a list of other files and directories. 
+You use File object to create directories, 
+to list down files available in a directory. 
+For complete detail, check a list of all the methods which you can call 
+on File object and what are related to directories.
+
+    String dirname = "/tmp/user/java/bin";
+      File d = new File(dirname);
+
+
+
+1)InPutStream − The InputStream is used to read data from a source.
+
+ OutPutStream − The OutputStream is used for writing data to a destination.
+
+
+2)
+Once you know this fundamental difference betwee
+stream and reader, understanding difference between 
+
+FileInputStream and FileReader is quite easy. 
+Both allows you to read data from File, 
+but FileInputStream is used to read binary data, while FileReader is used to read character data.
+
