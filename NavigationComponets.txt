@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+**********************************************************************
+package com.example.schoolmanageapp
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+
+
+class MainActivity : AppCompatActivity() {
+
+
+    private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+//        setupActionBarWithNavController(findNavController(R.id.fragment))
+       // navController = findNavController(R.id.fragment)
+
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+ navController = findNavController(R.id.fragment)
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+}
+
+**********************************************************************************
+navigation file in navigation folder
+
+nav_graph
+
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onefragment">
+
+    <fragment
+        android:id="@+id/onefragment"
+        android:name="com.example.schoolmanageapp.Fragment.OneFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_one" >
+        <action
+            android:id="@+id/action_oneFragment_to_SecondFragment"
+            app:destination="@+id/secondfragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/secondfragment"
+        android:name="com.example.schoolmanageapp.Fragment.SecondFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_second" >
+        <action
+            android:id="@+id/action_secondfragment_to_onefragment"
+            app:destination="@id/onefragment" />
+        <action
+            android:id="@+id/action_secondfragment_to_thirdfragment"
+            app:destination="@id/thirdfragment" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/thirdfragment"
+        android:name="com.example.schoolmanageapp.Fragment.ThirdFragment"
+        android:label="fragment_endgame"
+        tools:layout="@layout/fragment_third" >
+        <action
+            android:id="@+id/action_thirdfragent_to_onefragment"
+            app:destination="@id/onefragment" />
+        <action
+            android:id="@+id/action_thirdfragment_to_four_Fragment"
+            app:destination="@id/four_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/four_Fragment"
+        android:name="com.example.schoolmanageapp.Four_Fragment"
+        android:label="fragment_four_"
+        tools:layout="@layout/fragment_four_" />
+
+
+</navigation>
+
+*****************************************************************************
+package com.example.schoolmanageapp.Fragment
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.findNavController
+import com.example.schoolmanageapp.R
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+class OneFragment : Fragment() {
+    private var param1: String? = null
+    private var param2: String? = null
+    private lateinit var btn: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view:View= inflater.inflate(R.layout.fragment_one, container, false)
+        btn = view.findViewById(R.id.button_one)
+        btn.setOnClickListener {
+
+
+            findNavController().navigate(R.id.action_oneFragment_to_SecondFragment)
+
+        }
+        return view
+    }
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            OneFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+}
