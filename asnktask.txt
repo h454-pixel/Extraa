@@ -1,0 +1,79 @@
+public class
+ImagePicker extends AppCompatActivity {
+
+
+    Button button;
+    ProgressBar progressBar;
+
+    Switch aSwitch;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image_picker);
+
+
+        //    imageView = (ImageView) findViewById(R.id.image_view_pick);
+        button = (Button) findViewById(R.id.button_1);
+
+
+       // UploadTask  uploadTask = new UploadTask( "yes");
+       //uploadTask.execute();
+
+         new UploadTask().execute("first method excutions....");
+
+
+    }
+
+  //  class UploadTask extends AsyncTask<Void, Void, Void> {
+
+   //     class UploadTask extends AsyncTask<String, Void, Void> {
+
+    class UploadTask extends AsyncTask<String, Void, String> {  //third  one  stirng is for doin back void change into string
+                                                              // and postexecute take string
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+        protected String doInBackground(String... strings) {
+            for (int i = 0; i <= 10; i++) {
+                                                  //String ss =  Thread.currentThread().getName();
+          // this is working under background
+                try {
+                    Thread.sleep(4000);        /// we put on sleep main thread ..
+
+                    //   Toast.makeText(ImagePicker.this, "Thread running" +Thread.currentThread().getName(), Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "thread name " + Thread.currentThread().getName());
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return "first";
+
+                
+        }
+
+
+            @Override
+            protected void onPostExecute(String aVoid) {
+                super.onPostExecute(aVoid);
+            }
+
+
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                super.onProgressUpdate(values);
+            }
+        }
+
+
+
+
+}
+

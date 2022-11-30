@@ -1,0 +1,29 @@
+  try {
+
+
+       int  p = position;
+
+        String i = String.valueOf(p);
+
+        if (i == dstory[0]) {
+
+            Toast.makeText(MainActivity2.this, "use pre button", Toast.LENGTH_SHORT).show();
+        }
+
+
+       else  if (i == dstory[186]) {
+
+            Toast.makeText(MainActivity2.this, "use pre button", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
+        else{
+
+
+             position = (position - 1) % dstory.length;
+             textView.setText(dstory[position]);
+
+
+         }
