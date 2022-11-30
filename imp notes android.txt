@@ -1,0 +1,9 @@
+1)))))three types of logics presentation logic,
+       buisness logic,database logic
+
+
+ passing data through fragment, expendable recycler,serach with recyler,
+ custom fonts,data binding,
+
+
+**** relative marin top and margin all side can not use together
