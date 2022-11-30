@@ -1,0 +1,63 @@
+package com.dev_yogesh.singlefileuploadinretrofitwithprogreskotlin;
+
+import android.content.Context;
+import android.util.Log;
+
+import java.io.File;
+
+import androidx.annotation.NonNull;
+import androidx.work.WorkerParameters;
+
+public class Worker extends androidx.work.Worker {
+
+String string;
+File filesToUpload;
+
+    public Worker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+
+ ///filesToUpload =this.filesToUpload;
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+ //    string  = getInputData().getString(" ");
+    FileUploader fileUploader= new FileUploader();
+        //showProgress()//uploadFil
+        Log.e("MainActivity ", "...........uploadFile imagePath::  $imagePath");
+
+        String syncTable = getInputData().getString("SyncMaster");
+
+      
+      
+      
+      
+      
+      
+      
+      
+        Log.e(" ","..................synctable,........ "+syncTable);
+
+        //        assert syncTable != null;
+        //filesToUpload = new File(syncTable);
+
+        fileUploader.uploadFiles("/", "file", new File(syncTable));
+
+
+        int n =4;
+        int n2=4;
+        Log.e("TaG","Woker.............................."+n*n2);
+        return
+        try {
+          String firstValue = inputData.getString(FIRST_KEY, "Default String");
+           // val secondValue = inputData.getInt(SECOND_KEY, -1)
+            Result.success();
+        } catch (Exception e){
+            Result.failure();
+        }
+
+    }
+
+}
